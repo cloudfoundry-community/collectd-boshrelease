@@ -40,27 +40,22 @@ cf.collectd.warden.collectd_z1.0.disk-sda1.disk_ops.write 0.000000 1446825506
 cf.collectd.warden.collectd_z1.0.disk-sda1.disk_time.read 0.000000 1446825506
 ```
 
-## Usage
+## Try in bosh light
 
-To use this bosh release, first upload it to your bosh:
+To use this bosh release, do the normal bosh dance
 
 ```
-bosh target BOSH_HOST
+bosh target 192.168.50.4 lite
 git clone https://github.com/cloudfoundry-community/collectd-boshrelease.git
 cd collectd-boshrelease
-bosh upload release releases/collectd-1.yml
+./templates/make_manifest warden
+bosh create release --force ; bosh -n upload release ; bosh -n deploy
 ```
 
-For [bosh-lite](https://github.com/cloudfoundry/bosh-lite), you can quickly create a deployment manifest & deploy a cluster:
+The default manifest emits cpu, disk, df and load data every 5 sec to
+graphite on localhost. If you wanna see this data simply
 
 ```
-templates/make_manifest warden
-bosh -n deploy
-```
-
-For AWS EC2, create a single VM:
-
-```
-templates/make_manifest aws-ec2
-bosh -n deploy
+bosh ssh collectd_z1/0
+nc -l -p 2003
 ```

@@ -9,13 +9,6 @@ update:
   serial: false
 
 jobs:
-  - name: collectd_leader_z1
-    template: collectd
-    instances: 0
-    resource_pool: small_z1
-    networks: (( merge ))
-    persistent_disk: 0
-    properties: ~
   - name: collectd_z1
     template: collectd
     instances: 0
@@ -24,10 +17,23 @@ jobs:
     persistent_disk: 0
     update:
       canaries: 10
-    properties:
-      collectd:
-        leader_address: (( merge ))
 
 networks: (( merge ))
 
-properties: {}
+properties:
+  collectd:
+    hostname_prefix: cf.collectd.warden.
+    interval: 5
+    config: |
+      LoadPlugin "df"
+      LoadPlugin "disk"
+      LoadPlugin "cpu"
+      LoadPlugin "load"
+      LoadPlugin "write_graphite"
+      <Plugin "write_graphite">
+        <Node "">
+          EscapeCharacter "."
+          Host "localhost"
+          Port "2003"
+        </Node>
+      </Plugin>

@@ -12,19 +12,11 @@ update:
   update_watch_time: 1000-30000
 
 jobs:
-  - name: collectd_leader_z1
-    instances: 1
-    networks:
-      - name: collectd1
-        static_ips: (( static_ips(0) ))
   - name: collectd_z1
     instances: 2
     networks:
       - name: collectd1
         static_ips: ~
-    properties:
-      collectd:
-        leader_address: (( jobs.collectd_leader_z1.networks.collectd1.static_ips.[0] ))
 
 compilation:
   cloud_properties:
