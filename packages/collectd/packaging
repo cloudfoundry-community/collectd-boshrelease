@@ -1,0 +1,53 @@
+# -------------------------------------------------------------------
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+#
+# Original Source:
+# https://github.com/logsearch/logsearch-boshrelease
+# -------------------------------------------------------------------
+
+set -e # exit immediately if a simple command exits with a non-zero status
+set -u # report the usage of uninitialized variables
+
+# Detect # of CPUs so make jobs can be parallelized
+CPUS=$(grep -c ^processor /proc/cpuinfo)
+
+# Available variables
+# $BOSH_COMPILE_TARGET - where this package & spec'd source files are available
+# $BOSH_INSTALL_TARGET - where you copy/install files to be included in package
+
+# When we run ./configure it will let us know what plugins were built and which were enabled.
+# This information gets captured within the build artefacts so that anyone using the release can
+# see what plugins are available to them.
+CONFIGURE_LOG_LOCATION="${BOSH_INSTALL_TARGET}/collectd.configure.log"
+
+export LD_LIBRARY_PATH="/var/vcap/packages/python/lib"
+export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:/var/vcap/packages/yajl/lib"
+
+tar xzf collectd/collectd-5.4.1.tar.gz
+
+(
+  cd collectd-5.4.1
+  ./configure --prefix=${BOSH_INSTALL_TARGET} \
+      --enable-python --with-python=/var/vcap/packages/python/bin/python \
+      --enable-curl-json --with-libyajl=/var/vcap/packages/yajl \
+      >> ${CONFIGURE_LOG_LOCATION}
+
+  make -j${CPUS} install
+)
+
+mkdir -p $BOSH_INSTALL_TARGET/python
