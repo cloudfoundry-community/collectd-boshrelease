@@ -1,0 +1,13 @@
+---
+name: collectd
+packages: []
+templates:
+  bin/monit_debugger: bin/monit_debugger
+  bin/collectd_ctl: bin/collectd_ctl
+  config/collectd.conf.erb: config/collectd.conf
+  data/properties.sh.erb: data/properties.sh
+  helpers/ctl_setup.sh: helpers/ctl_setup.sh
+  helpers/ctl_utils.sh: helpers/ctl_utils.sh
+properties:
+  collectd.leader_address:
+    description: Hostname/IP to the leader/master of the cluster
