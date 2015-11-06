@@ -1,5 +1,45 @@
 # BOSH Release for collectd
 
+A super basic release for collectd
+
+With basic config
+
+```
+properties:
+  collectd:
+    hostname_prefix: cf.collectd.warden.
+    config: |
+      LoadPlugin "df"
+      LoadPlugin "disk"
+      LoadPlugin "cpu"
+      LoadPlugin "load"
+      LoadPlugin "write_graphite"
+      <Plugin "write_graphite">
+        <Node "">
+          EscapeCharacter "."
+          Host "localhost"
+          Port "2003"
+        </Node>
+      </Plugin>
+```
+
+You will end up with metrics that looks like
+
+```
+cf.collectd.warden.collectd_z1.0.cpu-1.cpu-steal 0.000000 1446825506
+cf.collectd.warden.collectd_z1.0.cpu-2.cpu-user 0.799932 1446825506
+cf.collectd.warden.collectd_z1.0.cpu-2.cpu-nice 0.000000 1446825506
+cf.collectd.warden.collectd_z1.0.cpu-2.cpu-system 0.199982 1446825506
+cf.collectd.warden.collectd_z1.0.cpu-2.cpu-idle 98.791028 1446825506
+cf.collectd.warden.collectd_z1.0.cpu-2.cpu-wait 0.000000 1446825506
+cf.collectd.warden.collectd_z1.0.cpu-2.cpu-interrupt 0.000000 1446825506
+cf.collectd.warden.collectd_z1.0.cpu-2.cpu-softirq 0.000000 1446825506
+cf.collectd.warden.collectd_z1.0.cpu-2.cpu-steal 0.000000 1446825506
+cf.collectd.warden.collectd_z1.0.disk-sda1.disk_ops.read 0.000000 1446825506
+cf.collectd.warden.collectd_z1.0.disk-sda1.disk_ops.write 0.000000 1446825506
+cf.collectd.warden.collectd_z1.0.disk-sda1.disk_time.read 0.000000 1446825506
+```
+
 ## Usage
 
 To use this bosh release, first upload it to your bosh:
@@ -22,30 +62,5 @@ For AWS EC2, create a single VM:
 
 ```
 templates/make_manifest aws-ec2
-bosh -n deploy
-```
-
-### Override security groups
-
-For AWS & Openstack, the default deployment assumes there is a `default` security group. If you wish to use a different security group(s) then you can pass in additional configuration when running `make_manifest` above.
-
-Create a file `my-networking.yml`:
-
-``` yaml
----
-networks:
-  - name: collectd1
-    type: dynamic
-    cloud_properties:
-      security_groups:
-        - collectd
-```
-
-Where `- collectd` means you wish to use an existing security group called `collectd`.
-
-You now suffix this file path to the `make_manifest` command:
-
-```
-templates/make_manifest openstack-nova my-networking.yml
 bosh -n deploy
 ```
