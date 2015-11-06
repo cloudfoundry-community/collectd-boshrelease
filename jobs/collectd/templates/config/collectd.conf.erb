@@ -1,5 +1,36 @@
-# Example of how to do one thing when job is master/leader, and another thing if its follower/slave
-# See templates/infrastructure-warden.yml & templates/jobs.yml for where this value originates
-<% if_p("collectd.leader_address") do |leader_address| %>
-leader: <%= leader_address %>
-<% end %>
+#
+# Config file for collectd(1).
+# Please read collectd.conf(5) for a list of options.
+# https://collectd.org/documentation/manpages/collectd.conf.5.shtml
+#
+
+##############################################################################
+# Global                                                                     #
+#----------------------------------------------------------------------------#
+# Global settings for the daemon.                                            #
+##############################################################################
+
+Hostname    "<%= p("collectd.hostname_prefix") %><%= name %>.<%= index %>"
+FQDNLookup   true
+
+TypesDB     "/var/vcap/packages/collectd/share/collectd/types.db"
+PluginDir   "/var/vcap/packages/collectd/lib/collectd"
+
+#----------------------------------------------------------------------------#
+# Interval at which to query values. This may be overwritten on a per-plugin #
+# base by using the 'Interval' option of the LoadPlugin block:               #
+#   <LoadPlugin foo>                                                         #
+#       Interval 60                                                          #
+#   </LoadPlugin>                                                            #
+#----------------------------------------------------------------------------#
+
+Interval     <%= p("collectd.interval") %>
+Timeout      <%= p("collectd.timeout") %>
+ReadThreads  <%= p("collectd.read_threads") %>
+
+##############################################################################
+# Include                                                                    #
+#----------------------------------------------------------------------------#
+# Load the remaining configuration from the files in this directory          #
+##############################################################################
+Include     "/var/vcap/jobs/collectd/collectd.d/*.conf"

@@ -1,25 +1,85 @@
 #!/bin/bash
 
+# -------------------------------------------------------------------
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+#
+# Original Source:
+# https://github.com/logsearch/logsearch-boshrelease
+# -------------------------------------------------------------------
+
 set -e # exit immediately if a simple command exits with a non-zero status
 set -u # report the usage of uninitialized variables
 
 # Setup env vars and folders for the webapp_ctl script
 source /var/vcap/jobs/collectd/helpers/ctl_setup.sh 'collectd'
 
-export PORT=${PORT:-5000}
-export LANG=en_US.UTF-8
+# Log some info to the Monit Log file
+function log {
+    local message=${1}
+    local timestamp=`date +%y:%m:%d-%H:%M:%S`
+    echo "${timestamp} :: ${message}" >> "/var/vcap/sys/log/monit/collectd.log"
+}
+
+# Enable some CollectD configuration based on the BOSH Jobs on the VM.
+function enable_dynamic_collectd_config {
+
+    local bosh_job="${1}"
+    local collectd_config_file="${2}"
+
+    local ACTIVE_COLLECTD_CONFIG_DIR="/var/vcap/jobs/collectd/collectd.d"
+    local DYNAMIC_COLLECTD_CONFIG_DIR="/var/vcap/jobs/collectd/collectd.d_dynamic"
+
+    if [[ -d "/var/vcap/jobs/${bosh_job}" ]]; then
+        # If the specificied BOSH Job is present but the dynamic CollectD config is not enabled, enable it.
+        if [[ ! -f "${ACTIVE_COLLECTD_CONFIG_DIR}/${collectd_config_file}" ]]; then
+            log "Enabling dynamic config: /var/vcap/jobs/${bosh_job} is present, installing ${collectd_config_file}..."
+            cp "${DYNAMIC_COLLECTD_CONFIG_DIR}/${collectd_config_file}" "${ACTIVE_COLLECTD_CONFIG_DIR}/."
+        else
+            log "Dynamic config: ${ACTIVE_COLLECTD_CONFIG_DIR}/${collectd_config_file} is already present."
+        fi
+    else
+        # If the specified BOSH Job is not present but the Dynamic CollectD config is enabled, disable it.
+        if [[ -f "${ACTIVE_COLLECTD_CONFIG_DIR}/${collectd_config_file}" ]]; then
+            log "Disabling dynamic config: /var/vcap/jobs/${bosh_job} NOT present removing ${collectd_config_file}..."
+            rm "${ACTIVE_COLLECTD_CONFIG_DIR}/${collectd_config_file}"
+        else
+            log "Dynamic config: ${ACTIVE_COLLECTD_CONFIG_DIR}/${collectd_config_file} is already absent."
+        fi
+    fi
+}
 
 case $1 in
 
   start)
     pid_guard $PIDFILE $JOB_NAME
 
-    # store pid in $PIDFILE
     echo $$ > $PIDFILE
 
-    exec chpst -u vcap:vcap collectd \
-         >>$LOG_DIR/$JOB_NAME.stdout.log \
-         2>>$LOG_DIR/$JOB_NAME.stderr.log
+    export LD_LIBRARY_PATH="/var/vcap/packages/python/lib"
+    export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:/var/vcap/packages/yajl/lib"
+
+    # -f
+    # Don't fork to the background. collectd will also not close standard file descriptors,
+    # detach from the session nor write a pid file. This is mainly thought for 'supervising'
+    # init replacements such as runit.
+    exec  /var/vcap/packages/collectd/sbin/collectd -f -C $JOB_DIR/config/collectd.conf \
+      >>$LOG_DIR/$JOB_NAME.stdout.log \
+      2>>$LOG_DIR/$JOB_NAME.stderr.log
 
     ;;
 
@@ -27,6 +87,7 @@ case $1 in
     kill_and_wait $PIDFILE
 
     ;;
+
   *)
     echo "Usage: collectd_ctl {start|stop}"
 

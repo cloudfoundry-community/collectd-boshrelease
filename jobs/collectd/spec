@@ -1,13 +1,33 @@
 ---
 name: collectd
-packages: []
+packages:
+  - collectd
 templates:
   bin/monit_debugger: bin/monit_debugger
   bin/collectd_ctl: bin/collectd_ctl
   config/collectd.conf.erb: config/collectd.conf
+  collectd.d/config.conf.erb: collectd.d/config.conf
   data/properties.sh.erb: data/properties.sh
   helpers/ctl_setup.sh: helpers/ctl_setup.sh
   helpers/ctl_utils.sh: helpers/ctl_utils.sh
+
 properties:
-  collectd.leader_address:
-    description: Hostname/IP to the leader/master of the cluster
+  collectd.interval:
+    default: 60
+    description: "Interval, in seconds, at which to query values."
+
+  collectd.timeout:
+    default: 2
+    description: "Consider a value list 'missing' when no update has been read or received for this number of iterations."
+
+  collectd.read_threads:
+    default: 5
+    description: "Number of threads to start for reading plugins."
+
+  collectd.hostname_prefix:
+    default: ""
+    description: "A prefix used in the hostname (suffixed by `job.index`)."
+
+  collectd.config:
+    default: ""
+    description: "A multiline string containing the config you want"
