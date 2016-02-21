@@ -40,7 +40,7 @@ cf.collectd.warden.collectd_z1.0.disk-sda1.disk_ops.write 0.000000 1446825506
 cf.collectd.warden.collectd_z1.0.disk-sda1.disk_time.read 0.000000 1446825506
 ```
 
-## Try in bosh light
+## Try in bosh lite
 
 To use this bosh release, do the normal bosh dance
 
