@@ -30,18 +30,6 @@ redirect_output ${output_label}
 
 export HOME=${HOME:-/home/vcap}
 
-# Add all packages' /bin & /sbin into $PATH
-for package_bin_dir in $(ls -d /var/vcap/packages/!(busybox)/*bin)
-do
-  export PATH=${package_bin_dir}:$PATH
-done
-
-export LD_LIBRARY_PATH=${LD_LIBRARY_PATH:-''} # default to empty
-for package_bin_dir in $(ls -d /var/vcap/packages/!(busybox)/lib)
-do
-  export LD_LIBRARY_PATH=${package_bin_dir}:$LD_LIBRARY_PATH
-done
-
 # Setup log, run and tmp folders
 
 export RUN_DIR=/var/vcap/sys/run/$JOB_NAME
@@ -78,5 +66,17 @@ do
 done
 
 PIDFILE=$RUN_DIR/$JOB_NAME.pid
+
+# Add all packages' /bin & /sbin into $PATH
+for package_bin_dir in $(ls -d /var/vcap/packages/!(busybox)/*bin)
+do
+  export PATH=${package_bin_dir}:$PATH
+done
+
+export LD_LIBRARY_PATH=${LD_LIBRARY_PATH:-''} # default to empty
+for package_bin_dir in $(ls -d /var/vcap/packages/!(busybox)/lib)
+do
+  export LD_LIBRARY_PATH=${package_bin_dir}:$LD_LIBRARY_PATH
+done
 
 echo '$PATH' $PATH
