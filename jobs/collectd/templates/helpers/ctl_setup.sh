@@ -70,7 +70,7 @@ PIDFILE=$RUN_DIR/$JOB_NAME.pid
 # Add all packages' /bin & /sbin into $PATH
 for package_bin_dir in $(ls -d /var/vcap/packages/!(busybox)/*bin)
 do
-  export PATH=${package_bin_dir}:$PATH
+  export PATH=$PATH:${package_bin_dir}
 done
 
 export LD_LIBRARY_PATH=${LD_LIBRARY_PATH:-''} # default to empty
