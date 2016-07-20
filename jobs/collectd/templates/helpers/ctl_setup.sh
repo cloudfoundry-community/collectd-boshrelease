@@ -76,7 +76,10 @@ done
 export LD_LIBRARY_PATH=${LD_LIBRARY_PATH:-''} # default to empty
 for package_bin_dir in $(ls -d /var/vcap/packages/!(busybox)/lib)
 do
-  export LD_LIBRARY_PATH=${package_bin_dir}:$LD_LIBRARY_PATH
+  # do not include a package with ld-*.so as it is likely a rootfs
+  if [ -z "$(find ${package_bin_dir} -name 'ld-*.so' -o -name 'ld64-*.so')" ]; then
+      export LD_LIBRARY_PATH=${package_bin_dir}${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
+  fi
 done
 
 echo '$PATH' $PATH
