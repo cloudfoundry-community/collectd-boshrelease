@@ -1,7 +1,6 @@
 ---
 name: collectd
 dependencies:
-- python
 - yajl
 files:
-- collectd/collectd-5.4.1.tar.gz
+- collectd/collectd-5.7.1.tar.bz2

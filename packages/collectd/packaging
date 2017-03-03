@@ -38,12 +38,11 @@ CONFIGURE_LOG_LOCATION="${BOSH_INSTALL_TARGET}/collectd.configure.log"
 export LD_LIBRARY_PATH="/var/vcap/packages/python/lib"
 export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:/var/vcap/packages/yajl/lib"
 
-tar xzf collectd/collectd-5.4.1.tar.gz
+tar xjf collectd/collectd-5.7.1.tar.bz2
 
 (
-  cd collectd-5.4.1
+  cd collectd-5.7.1
   ./configure --prefix=${BOSH_INSTALL_TARGET} \
-      --enable-python --with-python=/var/vcap/packages/python/bin/python \
       --enable-curl-json --with-libyajl=/var/vcap/packages/yajl \
       >> ${CONFIGURE_LOG_LOCATION}
 
