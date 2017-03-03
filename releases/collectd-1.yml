@@ -1,0 +1,28 @@
+---
+packages:
+- name: python
+  version: 484075d81d41ce3985fa299004a82d96c9a24aa7
+  sha1: 6274f40326aa101d5795d7fa8cb5c66157a9a475
+  fingerprint: 484075d81d41ce3985fa299004a82d96c9a24aa7
+  dependencies: []
+- name: yajl
+  version: 9fd25f6eafcbad7df0ebd665ad014fee90d8be78
+  sha1: 06acca04752821d46f53e22119fac802fc7abca0
+  fingerprint: 9fd25f6eafcbad7df0ebd665ad014fee90d8be78
+  dependencies: []
+- name: collectd
+  version: e2d748928525612e8bc7f99173dfa9ce96367acb
+  sha1: 409bc1d4f2e2770ac99b7ecc393efafc54ac7153
+  fingerprint: e2d748928525612e8bc7f99173dfa9ce96367acb
+  dependencies:
+  - python
+  - yajl
+jobs:
+- name: collectd
+  version: 3fd366c5d0fb0a7c00a9ddca810b1aaab887f14a
+  fingerprint: 3fd366c5d0fb0a7c00a9ddca810b1aaab887f14a
+  sha1: 57749a76bdba1afb8bd08abe9fbef86cf5ea355e
+commit_hash: 30a27838
+uncommitted_changes: true
+name: collectd
+version: '1'

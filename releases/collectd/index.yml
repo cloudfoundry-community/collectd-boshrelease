@@ -1,7 +1,0 @@
----
-builds:
-  e63b2f94-362c-4e9e-9dd7-5fe8236165d3:
-    version: '1'
-  272e6a1b-ce40-426c-bacc-25d946f5e136:
-    version: '2'
-format-version: '2'
