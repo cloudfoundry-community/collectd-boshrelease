@@ -1,9 +1,6 @@
----
-yajl/2.1.0.tar.gz:
-  object_id: 38c74cdc-d4fa-454a-9cd4-fd64e4ddddda
-  sha: 29ce2b9695ae93e1b0b349a22cea8067f25a9025
-  size: 83997
 collectd/collectd-5.7.1.tar.bz2:
-  object_id: eceb6b3f-41fe-4b8b-aea5-6e24fa70a182
-  sha: bc77d2493b26e5c38e167a8a44fedfe287742c09
   size: 1797725
+  sha: bc77d2493b26e5c38e167a8a44fedfe287742c09
+yajl/yajl-2.1.0.tar.gz:
+  size: 84039
+  sha: fe6b3c7439b26175aee59cabf8c4923b9eb3650d
