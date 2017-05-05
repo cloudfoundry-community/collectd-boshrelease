@@ -1,7 +1,8 @@
----
 builds:
-  e63b2f94-362c-4e9e-9dd7-5fe8236165d3:
-    version: '1'
+  1fda19c0-3770-424d-7a07-b5a1b0b63b3c:
+    version: 2.1.0
   272e6a1b-ce40-426c-bacc-25d946f5e136:
-    version: '2'
-format-version: '2'
+    version: "2"
+  e63b2f94-362c-4e9e-9dd7-5fe8236165d3:
+    version: "1"
+format-version: "2"
