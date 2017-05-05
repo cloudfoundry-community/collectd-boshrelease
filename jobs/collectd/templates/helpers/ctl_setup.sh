@@ -12,6 +12,7 @@
 
 set -e # exit immediately if a simple command exits with a non-zero status
 set -u # report the usage of uninitialized variables
+shopt -s extglob # so we can ignore busybox when globbing
 
 JOB_NAME=$1
 output_label=${1:-JOB_NAME}
@@ -28,18 +29,6 @@ source $JOB_DIR/helpers/ctl_utils.sh
 redirect_output ${output_label}
 
 export HOME=${HOME:-/home/vcap}
-
-# Add all packages' /bin & /sbin into $PATH
-for package_bin_dir in $(ls -d /var/vcap/packages/*/*bin)
-do
-  export PATH=${package_bin_dir}:$PATH
-done
-
-export LD_LIBRARY_PATH=${LD_LIBRARY_PATH:-''} # default to empty
-for package_bin_dir in $(ls -d /var/vcap/packages/*/lib)
-do
-  export LD_LIBRARY_PATH=${package_bin_dir}:$LD_LIBRARY_PATH
-done
 
 # Setup log, run and tmp folders
 
@@ -77,5 +66,20 @@ do
 done
 
 PIDFILE=$RUN_DIR/$JOB_NAME.pid
+
+# Add all packages' /bin & /sbin into $PATH
+for package_bin_dir in $(ls -d /var/vcap/packages/!(busybox)/*bin)
+do
+  export PATH=$PATH:${package_bin_dir}
+done
+
+export LD_LIBRARY_PATH=${LD_LIBRARY_PATH:-''} # default to empty
+for package_bin_dir in $(ls -d /var/vcap/packages/!(busybox)/lib)
+do
+  # do not include a package with ld-*.so as it is likely a rootfs
+  if [ -z "$(find ${package_bin_dir} -name 'ld-*.so' -o -name 'ld64-*.so')" ]; then
+      export LD_LIBRARY_PATH=${package_bin_dir}${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
+  fi
+done
 
 echo '$PATH' $PATH
