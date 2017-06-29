@@ -40,7 +40,6 @@ for dir in $RUN_DIR $LOG_DIR $TMP_DIR $STORE_DIR
 do
   mkdir -p ${dir}
   chown vcap:vcap ${dir}
-  chmod 775 ${dir}
 done
 export TMPDIR=$TMP_DIR
 
