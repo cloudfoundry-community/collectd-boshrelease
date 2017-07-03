@@ -2,6 +2,7 @@
 name: collectd
 packages:
   - collectd
+  - yajl
 templates:
   bin/monit_debugger: bin/monit_debugger
   bin/collectd_ctl: bin/collectd_ctl
