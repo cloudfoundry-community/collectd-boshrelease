@@ -1,0 +1,25 @@
+name: collectd
+version: 2.2.0
+commit_hash: cbc85a9
+uncommitted_changes: false
+jobs:
+- name: collectd
+  version: 091892ecea48f0650b300f5b3a976ca2e7143a54
+  fingerprint: 091892ecea48f0650b300f5b3a976ca2e7143a54
+  sha1: 2312de00ab446809a26df358e5d93332f9d0dd79
+packages:
+- name: collectd
+  version: a730c90db12d2162381733d80d3d9ee34de2e454
+  fingerprint: a730c90db12d2162381733d80d3d9ee34de2e454
+  sha1: 1e245b63ce13069b29afc0f9d7d6d9f17c86fb17
+  dependencies:
+  - yajl
+- name: yajl
+  version: 29b249446242da55d1535a79abc8b8c335a9b065
+  fingerprint: 29b249446242da55d1535a79abc8b8c335a9b065
+  sha1: 91bceef6d912046993bdb07b4be724a71fd84141
+  dependencies: []
+license:
+  version: 065618543a2ecc8600af3ead5930ef8d11c9aa80
+  fingerprint: 065618543a2ecc8600af3ead5930ef8d11c9aa80
+  sha1: 1d877ff0177bc2bf85f36fd70b8ff40173c9a44c
