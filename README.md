@@ -1,6 +1,8 @@
 # Run collectd with BOSH
 
-A super basic release for collectd
+A super basic release for collectd.
+
+* [CI](http://ci.starkandwayne.com/teams/main/pipelines/collectd-boshrelease) for testing pull requests + cutting releases
 
 With basic config
 
