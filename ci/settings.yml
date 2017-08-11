@@ -33,17 +33,15 @@ meta:
 groups:
 - name: blobs
   jobs:
-  - (( meta.name ))
+  - collectd
 
 jobs:
-- name: (( meta.name ))
+- name: collectd
   public: true
   plan:
   - aggregate:
     - { get: git }
-    - get: (( meta.name ))
-      trigger: true
-      params: { globs: [linux_amd64.tar.gz] }
+    - { get: collectd, trigger: true }
   - task: update-blob
     config:
       image_resource:
@@ -53,7 +51,7 @@ jobs:
       platform: linux
       inputs:
       - name: git
-      - name: (( meta.name ))
+      - name: collectd
       outputs:
       - name: pushme
       run:
@@ -61,10 +59,10 @@ jobs:
       params:
         REPO_ROOT:   git
         REPO_OUT:    pushme
-        BLOB_DIR:    (( meta.name ))
-        BLOB_NAME:   (( meta.name ))
+        BLOB_DIR:    collectd
+        BLOB_NAME:   collectd
         BLOB_BINARY: collectd*.tar.bz2
-        BLOB_URL:    (( concat "https://github.com/" meta.name "/" meta.name ))
+        BLOB_URL:    https://github.com/collectd/collectd
         BLOB_DESTINATION: collectd/collectd.tar.bz2
         AWS_ACCESS_KEY: (( grab meta.aws.access_key ))
         AWS_SECRET_KEY: (( grab meta.aws.secret_key ))
@@ -96,9 +94,9 @@ jobs:
         text:     (( grab meta.slack.blob_failure ))
 
 resources:
-  - name: (( meta.name ))
+  - name: collectd
     type: github-release
     source:
-      user:         (( meta.name ))
-      repository:   (( meta.name ))
+      user:         collectd
+      repository:   collectd
       access_token: (( grab meta.github.access_token ))
