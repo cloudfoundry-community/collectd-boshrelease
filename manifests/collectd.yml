@@ -1,0 +1,46 @@
+---
+name: collectd
+
+instance_groups:
+- name: collectd
+  azs: [z1]
+  instances: 1
+  vm_type: default
+  stemcell: default
+  networks: [{name: default}]
+  jobs:
+  - name: collectd
+    release: collectd
+    properties:
+      collectd:
+        config: |
+          LoadPlugin "df"
+          LoadPlugin "disk"
+          LoadPlugin "cpu"
+          LoadPlugin "load"
+          LoadPlugin "write_graphite"
+          <Plugin "write_graphite">
+            <Node "">
+              EscapeCharacter "."
+              Host "localhost"
+              Port "2003"
+            </Node>
+          </Plugin>
+
+update:
+  canaries: 1
+  max_in_flight: 1
+  canary_watch_time: 1000-30000
+  update_watch_time: 1000-30000
+  serial: false
+
+stemcells:
+  - alias: default
+    os: ubuntu-trusty
+    version: latest
+
+releases:
+- name: collectd
+  version: 2.1.0
+  url: https://github.com/cloudfoundry-community/collectd-boshrelease/releases/download/v2.1.0/collectd-2.1.0.tgz
+  sha1: 68d0bd96dbb5104bd673ae1d6474b3abd6d11e90

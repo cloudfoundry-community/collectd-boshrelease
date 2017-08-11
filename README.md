@@ -1,4 +1,4 @@
-# BOSH Release for collectd
+# Run collectd with BOSH
 
 A super basic release for collectd
 
@@ -40,16 +40,17 @@ cf.collectd.warden.collectd_z1.0.disk-sda1.disk_ops.write 0.000000 1446825506
 cf.collectd.warden.collectd_z1.0.disk-sda1.disk_time.read 0.000000 1446825506
 ```
 
-## Try in bosh lite
+## Usage
 
-To use this bosh release, do the normal bosh dance
+To use this bosh release:
 
 ```
-bosh target 192.168.50.4 lite
 git clone https://github.com/cloudfoundry-community/collectd-boshrelease.git
 cd collectd-boshrelease
-./templates/make_manifest warden
-bosh create release --force ; bosh -n upload release ; bosh -n deploy
+
+export BOSH_ENVIRONMENT=<alias>
+export BOSH_DEPLOYMENT=haproxy
+bosh2 deploy manifests/collectd.yml
 ```
 
 The default manifest emits cpu, disk, df and load data every 5 sec to
