@@ -29,3 +29,76 @@ meta:
     channel: '#collectd'
     blob_success:  '(( concat "$BUILD_PIPELINE_NAME: New version of $BUILD_JOB_NAME was detected, and updated in master. <" meta.url "/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME| Cut a new release?>" ))'
     blob_failure:  '(( concat "$BUILD_PIPELINE_NAME: :airplane_arriving: <" meta.url "/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME| Failed to update the blob for $BUILD_JOB_NAME>" ))'
+
+groups:
+- name: blobs
+  jobs:
+  - (( meta.name ))
+
+jobs:
+- name: (( meta.name ))
+  public: true
+  plan:
+  - aggregate:
+    - { get: git }
+    - get: (( meta.name ))
+      trigger: true
+      params: { globs: [linux_amd64.tar.gz] }
+  - task: update-blob
+    config:
+      image_resource:
+        type: docker-image
+        source:
+          repository: (( grab meta.image ))
+      platform: linux
+      inputs:
+      - name: git
+      - name: (( meta.name ))
+      outputs:
+      - name: pushme
+      run:
+        path: ./git/ci/scripts/update-blob
+      params:
+        REPO_ROOT:   git
+        REPO_OUT:    pushme
+        BLOB_DIR:    (( meta.name ))
+        BLOB_NAME:   (( meta.name ))
+        BLOB_BINARY: collectd*.tar.bz2
+        BLOB_URL:    (( concat "https://github.com/" meta.name "/" meta.name ))
+        BLOB_DESTINATION: collectd/collectd.tar.bz2
+        AWS_ACCESS_KEY: (( grab meta.aws.access_key ))
+        AWS_SECRET_KEY: (( grab meta.aws.secret_key ))
+        BRANCH:         (( grab meta.github.branch ))
+    on_failure:
+      put: notify
+      params:
+        channel:  (( grab meta.slack.channel ))
+        username: (( grab meta.slack.username ))
+        icon_url: (( grab meta.slack.icon ))
+        text:     (( grab meta.slack.blob_failure ))
+  - put: git
+    params:
+      rebase: true
+      repository: pushme/git
+    on_success:
+      put: notify
+      params:
+        channel:  (( grab meta.slack.channel ))
+        username: (( grab meta.slack.username ))
+        icon_url: (( grab meta.slack.icon ))
+        text:     (( grab meta.slack.blob_success ))
+    on_failure:
+      put: notify
+      params:
+        channel:  (( grab meta.slack.channel ))
+        username: (( grab meta.slack.username ))
+        icon_url: (( grab meta.slack.icon ))
+        text:     (( grab meta.slack.blob_failure ))
+
+resources:
+  - name: (( meta.name ))
+    type: github-release
+    source:
+      user:         (( meta.name ))
+      repository:   (( meta.name ))
+      access_token: (( grab meta.github.access_token ))

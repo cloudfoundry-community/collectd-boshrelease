@@ -3,4 +3,4 @@ name: collectd
 dependencies:
 - yajl
 files:
-- collectd/collectd-*.tar.bz2
+- collectd/collectd*.tar.bz2
