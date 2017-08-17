@@ -65,7 +65,8 @@ jobs:
         BLOB_NAME:   collectd
         BLOB_BINARY: collectd*.tar.bz2
         BLOB_URL:    https://github.com/collectd/collectd
-        BLOB_DESTINATION: collectd/collectd.tar.bz2
+        BLOB_DESTINATION: collectd/collectd-v${VERSION}.tar.bz2
+        BLOB_CLEANUP:     collectd/collectd.*
         AWS_ACCESS_KEY: (( grab meta.aws.access_key ))
         AWS_SECRET_KEY: (( grab meta.aws.secret_key ))
         BRANCH:         (( grab meta.github.branch ))
