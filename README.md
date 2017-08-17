@@ -2,7 +2,10 @@
 
 A super basic release for collectd.
 
-* [CI](http://ci.starkandwayne.com/teams/main/pipelines/collectd-boshrelease) for testing pull requests + cutting releases
+* [Concourse CI](https://ci.starkandwayne.com/teams/main/pipelines/collectd-boshrelease)
+* Pull requests will be automatically tested against a bosh-lite (see `testflight-pr` job)
+* Latest upstream project versions are automatically added as [blobs via CI](https://ci.starkandwayne.com/teams/main/pipelines/collectd-boshrelease?groups=blobs)
+* Discussions and CI notifications at [#collectd-boshrelease channel](https://cloudfoundry.slack.com/messages/C6RAUJGUF/) on https://slack.cloudfoundry.org
 
 With basic config
 
