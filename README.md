@@ -55,11 +55,40 @@ cd collectd-boshrelease
 
 export BOSH_ENVIRONMENT=<alias>
 export BOSH_DEPLOYMENT=haproxy
-bosh2 deploy manifests/collectd.yml
+bosh deploy manifests/collectd.yml
+```
+
+To specify your own collectd configuration, then apply an operator file to modify the default.
+
+Create a file, say `tmp/config.yml`:
+
+```yaml
+---
+- type: replace
+  path: /instance_groups/name=collectd/jobs/name=collectd/properties/collectd/config
+  value: |
+      LoadPlugin "df"
+      LoadPlugin "disk"
+      LoadPlugin "cpu"
+      LoadPlugin "load"
+      LoadPlugin "write_graphite"
+      <Plugin "write_graphite">
+        <Node "">
+          EscapeCharacter "."
+          Host "localhost"
+          Port "2003"
+        </Node>
+      </Plugin>
+```
+
+Merge your change into the deployment:
+
+```
+bosh deploy manifests/collectd.yml -o tmp/config.yml
 ```
 
 The default manifest emits cpu, disk, df and load data every 5 sec to
-graphite on localhost. If you wanna see this data simply
+graphite on localhost. If you want to see this data simply:
 
 ```
 bosh ssh collectd_z1/0
