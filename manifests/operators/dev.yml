@@ -1,0 +1,6 @@
+---
+- type: replace
+  path: /releases/name=collectd
+  value:
+    name: collectd
+    version: latest
