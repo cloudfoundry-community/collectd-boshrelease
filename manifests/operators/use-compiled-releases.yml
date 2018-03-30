@@ -1,0 +1,15 @@
+- path: /releases/name=collectd/url
+  type: replace
+  value: "https://s3.amazonaws.com/collectd-boshrelease/compiled-releases/collectd-2.2.1-ubuntu-trusty-3541.10-20180330-022424-625154593-20180330022424.tgz"
+- path: /releases/name=collectd/version
+  type: replace
+  value: "2.2.1"
+- path: /releases/name=collectd/sha1
+  type: replace
+  value: "6513997b3d04b8742938c02363b1a955e988dd1f"
+
+- path: /releases/name=collectd/stemcell?
+  type: replace
+  value:
+    os: "ubuntu-trusty"
+    version: "3541.10"
