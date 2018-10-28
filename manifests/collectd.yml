@@ -41,6 +41,9 @@ stemcells:
 
 releases:
 - name: collectd
-  sha1: 5a738b69f7004e7f8c80ab8ca66a3b77a449a278
-  url: https://github.com/cloudfoundry-community/collectd-boshrelease/releases/download/v2.2.3/collectd-2.2.3.tgz
+  sha1: 58970c443385380951306a755b4ee2bb405cdd80
+  stemcell:
+    os: ubuntu-xenial
+    version: "97.28"
+  url: https://s3.amazonaws.com/collectd-boshrelease/compiled-releases/collectd/collectd-2.2.3-ubuntu-xenial-97.28-20181028-012725-46629094-20181028012725.tgz
   version: 2.2.3
