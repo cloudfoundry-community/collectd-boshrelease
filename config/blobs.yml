@@ -1,7 +1,7 @@
-collectd/collectd-5.8.0.tar.bz2:
-  size: 1686017
-  object_id: bb801769-9d0d-4c9a-4e16-687304c35007
-  sha: eb3567563de471e1950b7388e8883b911be3756a
+collectd/collectd-5.8.1.tar.bz2:
+  size: 1789228
+  object_id: 1be34181-d055-4f13-6667-30027914d4ec
+  sha: ae02cf7474cf72b79be901b6f75e645330446198
 yajl/yajl-2.1.0.tar.gz:
   size: 84039
   object_id: 8aaed8b3-9ded-4568-6fb3-7bee36e3da2a
