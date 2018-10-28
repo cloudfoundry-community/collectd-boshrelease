@@ -13,4 +13,6 @@ builds:
     version: "1"
   ea007652-d9f1-48fc-702b-304edb7c2efe:
     version: 2.1.1
+  fd1222d6-7552-4c1a-76b8-4cb63d1085c1:
+    version: 2.2.3
 format-version: "2"

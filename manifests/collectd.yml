@@ -41,6 +41,6 @@ stemcells:
 
 releases:
 - name: collectd
-  sha1: eefd3bc42f1273d3b968fcb0c7e7bfd0923eb5d0
-  url: https://github.com/cloudfoundry-community/collectd-boshrelease/releases/download/v2.2.2/collectd-2.2.2.tgz
-  version: 2.2.2
+  sha1: 5a738b69f7004e7f8c80ab8ca66a3b77a449a278
+  url: https://github.com/cloudfoundry-community/collectd-boshrelease/releases/download/v2.2.3/collectd-2.2.3.tgz
+  version: 2.2.3
