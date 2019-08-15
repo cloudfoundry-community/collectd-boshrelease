@@ -22,12 +22,6 @@ meta:
     private_key:  ((github-private-key))
     access_token: ((github-access-token))
 
-  bosh-lite:
-    target:   ((bosh-lite-environment))
-    cacert:   ((bosh-lite-ca-cert))
-    username: ((bosh-lite-client))
-    password: ((bosh-lite-client-secret))
-
   slack:
     webhook:  ((slack-webhook))
     icon:     ((slack-logo))
@@ -45,9 +39,8 @@ jobs:
 - name: collectd
   public: true
   plan:
-  - aggregate:
-    - { get: git }
-    - { get: collectd, trigger: true }
+  - { get: git }
+  - { get: collectd, trigger: true }
   - task: update-blob
     config:
       image_resource:
