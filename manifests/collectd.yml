@@ -41,9 +41,9 @@ stemcells:
 
 releases:
 - name: collectd
-  sha1: 58970c443385380951306a755b4ee2bb405cdd80
+  sha1: 4c5c76d58036e7d09aff43daa86dcac84736d977
   stemcell:
     os: ubuntu-xenial
-    version: "97.28"
-  url: https://s3.amazonaws.com/collectd-boshrelease/compiled-releases/collectd/collectd-2.2.3-ubuntu-xenial-97.28-20181028-012725-46629094-20181028012725.tgz
+    version: "456.3"
+  url: https://s3.amazonaws.com/collectd-boshrelease/compiled-releases/collectd/collectd-2.2.3-ubuntu-xenial-456.3-20190815-184941-063685252-20190815184941.tgz
   version: 2.2.3
